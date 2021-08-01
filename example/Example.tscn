@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/array_modifier/ArrayModifier.gd" type="Script" id=1]
+[ext_resource path="res://models/cryo_albedo.png" type="Texture" id=2]
+[ext_resource path="res://models/cryo.obj" type="ArrayMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="PlaneMesh" id=2]
+size = Vector2( 100, 100 )
+
+[node name="Example" type="Spatial"]
+
+[node name="ArrayModifier" type="Spatial" parent="."]
+script = ExtResource( 1 )
+repeat_levels = [ 3, 7, 4 ]
+repeat_offsets = [ Vector3( 4, 0, 0 ), Vector3( 0, 0, 3 ), Vector3( 0, 5, 0 ) ]
+
+[node name="Model" type="MeshInstance" parent="ArrayModifier"]
+material_override = SubResource( 1 )
+mesh = ExtResource( 3 )
+material/0 = null
+
+[node name="Floor" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="Light" type="OmniLight" parent="Floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22, -5 )
+omni_range = 40.0

@@ -1,0 +1,11 @@
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/LICENSE            export-ignore
+/README.md          export-ignore
+/default_env.tres   export-ignore
+/example/           export-ignore
+/icon.png           export-ignore
+/icon.png.import    export-ignore
+/models/            export-ignore
+/project.godot      export-ignore
+/screenshots/       export-ignore
