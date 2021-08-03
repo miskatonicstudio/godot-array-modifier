@@ -9,7 +9,14 @@ func _enter_tree():
 		preload("ArrayModifier.gd"),
 		preload("array_modifier_icon.png")
 	)
+	add_custom_type(
+		"ArrayModifier2D",
+		"Node2D",
+		preload("ArrayModifier2D.gd"),
+		preload("array_modifier_icon_2d.png")
+	)
 
 
 func _exit_tree():
 	remove_custom_type("ArrayModifier")
+	remove_custom_type("ArrayModifier2D")
