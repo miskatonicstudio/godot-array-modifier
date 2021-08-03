@@ -8,6 +8,10 @@ export (bool) var force_refresh = false setget set_force_refresh
 var _hooks = Dictionary()
 
 
+func _ready():
+	_adjust_copies()
+
+
 func set_repeat_levels(value):
 	# Make sure the value will be at least 1
 	for i in range(len(value)):
