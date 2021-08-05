@@ -10,6 +10,12 @@ func _enter_tree():
 		preload("array_modifier_icon.png")
 	)
 	add_custom_type(
+		"ArrayModifierPath",
+		"Spatial",
+		preload("ArrayModifierPath.gd"),
+		preload("array_modifier_path_icon.png")
+	)
+	add_custom_type(
 		"ArrayModifier2D",
 		"Node2D",
 		preload("ArrayModifier2D.gd"),
@@ -19,4 +25,5 @@ func _enter_tree():
 
 func _exit_tree():
 	remove_custom_type("ArrayModifier")
+	remove_custom_type("ArrayModifierPath")
 	remove_custom_type("ArrayModifier2D")

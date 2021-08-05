@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/array_modifier/ArrayModifierPath.gd" type="Script" id=1]
+[ext_resource path="res://resources/cryo.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://resources/cryo_albedo.png" type="Texture" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="Curve3D" id=2]
+_data = {
+"points": PoolVector3Array( 0, 0, 2.76063, 0, 0, -2.76063, -5, 0, 0, -2.76063, 0, 0, 2.76063, 0, 0, 0, 0, -5, 0, 0, -2.76063, 0, 0, 2.76063, 5, 0, 0, 2.76063, 0, 0, -2.76063, 0, 0, 0, 0, 5, 0, 0, 2.76063, 0, 0, -2.76063, -5, 0, 0 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="PlaneMesh" id=3]
+size = Vector2( 100, 100 )
+
+[node name="ExamplePath" type="Spatial"]
+
+[node name="ArrayModifierPath" type="Spatial" parent="."]
+script = ExtResource( 1 )
+path = NodePath("../Path")
+repeat_offset = 0.1
+repeat_count = 10
+
+[node name="Model" type="MeshInstance" parent="ArrayModifierPath"]
+transform = Transform( 0.999838, 0, -0.0180288, 0, 1, 0, 0.0180288, 0, 0.999837, -4.99995, 0, -0.00275022 )
+material_override = SubResource( 1 )
+mesh = ExtResource( 2 )
+material/0 = null
+
+[node name="Path" type="Path" parent="."]
+curve = SubResource( 2 )
+
+[node name="BezierCircle" type="MeshInstance" parent="Path"]
+
+[node name="Floor" type="MeshInstance" parent="."]
+mesh = SubResource( 3 )
+material/0 = null
