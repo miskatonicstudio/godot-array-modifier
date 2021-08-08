@@ -1,10 +1,10 @@
-extends Spatial
+extends Node2D
 tool
 
 export (NodePath) var path setget set_path
 export (float, 0, 1, 0.001) var path_offset_start setget set_path_offset_start
 export (float) var repeat_offset setget set_repeat_offset
-export (Vector3) var instance_offset = Vector3.ZERO
+export (Vector2) var instance_offset = Vector2.ZERO
 
 export (int) var repeat_count = 1 setget set_repeat_count
 export (bool) var force_refresh = false setget set_force_refresh
@@ -33,13 +33,13 @@ func _get_copy_position_rotation(instance_number):
 
 
 func set_path(value):
-	if get_node(value) is Path:
+	if get_node(value) is Path2D:
 		_path_node = get_node(value)
 		_path_length = _path_node.curve.get_baked_length()
 		path = value
 		_adjust_copies()
 	else:
-		printerr("Selected node is not a Path instance")
+		printerr("Selected node is not a Path2D instance")
 		_path_node = null
 		path = null
 
@@ -86,7 +86,7 @@ func _adjust_copies():
 			continue
 		
 		# Create a "hook" for each actual child, to hold the copies in
-		var hook = Spatial.new()
+		var hook = Node2D.new()
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
 		_hooks[hook.name] = hook
@@ -96,22 +96,24 @@ func _adjust_copies():
 			var position_rotation = _get_copy_position_rotation(index)
 			if index == 0:
 				orig_child.transform.origin = position_rotation[0]
-				orig_child.transform = orig_child.transform.looking_at(
-					position_rotation[1], Vector3.UP
+				orig_child.transform = Transform2D(
+					position_rotation[1].angle_to_point(position_rotation[0]),
+					position_rotation[0]
 				)
-				if instance_offset != Vector3.ZERO:
+				if instance_offset != Vector2.ZERO:
 					orig_child.translate(
-						get_transform().basis.xform(instance_offset)
+						get_transform().xform(instance_offset)
 					)
 			else:
 				var temp_index = index
 				var copy = orig_child.duplicate()
 				copy.transform.origin = position_rotation[0] + instance_offset
-				copy.transform = copy.transform.looking_at(
-					position_rotation[1], Vector3.UP
+				copy.transform = Transform2D(
+					position_rotation[1].angle_to_point(position_rotation[0]),
+					position_rotation[0]
 				)
-				if instance_offset != Vector3.ZERO:
-					copy.translate(get_transform().basis.xform(instance_offset))
+				if instance_offset != Vector2.ZERO:
+					copy.translate(get_transform().xform(instance_offset))
 				hook.add_child(copy)
 
 
@@ -132,22 +134,24 @@ func _adjust_position_of_copies():
 			var position_rotation = _get_copy_position_rotation(index)
 			if index == 0:
 				orig_child.transform.origin = position_rotation[0]
-				orig_child.transform = orig_child.transform.looking_at(
-					position_rotation[1], Vector3.UP
+				orig_child.transform = Transform2D(
+					position_rotation[1].angle_to_point(position_rotation[0]),
+					position_rotation[0]
 				)
-				if instance_offset != Vector3.ZERO:
+				if instance_offset != Vector2.ZERO:
 					orig_child.translate(
-						get_transform().basis.xform(instance_offset)
+						get_transform().xform(instance_offset)
 					)
 			else:
 				# Find the copy that should be moved
 				var copy = hook.get_children()[index - 1]
 				copy.transform.origin = position_rotation[0]
-				copy.transform = copy.transform.looking_at(
-					position_rotation[1], Vector3.UP
+				copy.transform = Transform2D(
+					position_rotation[1].angle_to_point(position_rotation[0]),
+					position_rotation[0]
 				)
-				if instance_offset != Vector3.ZERO:
-					copy.translate(get_transform().basis.xform(instance_offset))
+				if instance_offset != Vector2.ZERO:
+					copy.translate(get_transform().xform(instance_offset))
 
 
 func _get_hook_name_prefix():

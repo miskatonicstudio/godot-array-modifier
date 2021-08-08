@@ -33,8 +33,6 @@ material/0 = null
 [node name="Path" type="Path" parent="."]
 curve = SubResource( 2 )
 
-[node name="BezierCircle" type="MeshInstance" parent="Path"]
-
 [node name="Floor" type="MeshInstance" parent="."]
 mesh = SubResource( 3 )
 material/0 = null

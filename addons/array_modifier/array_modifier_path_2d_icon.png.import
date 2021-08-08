@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/array_modifier_icon_2d.png-904af21fbbac99fe66a8f99085963e64.stex"
+path="res://.import/array_modifier_path_2d_icon.png-e0927f9c964a60c6e51ac46c9c7b28e9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/array_modifier/array_modifier_icon_2d.png"
-dest_files=[ "res://.import/array_modifier_icon_2d.png-904af21fbbac99fe66a8f99085963e64.stex" ]
+source_file="res://addons/array_modifier/array_modifier_path_2d_icon.png"
+dest_files=[ "res://.import/array_modifier_path_2d_icon.png-e0927f9c964a60c6e51ac46c9c7b28e9.stex" ]
 
 [params]
 
