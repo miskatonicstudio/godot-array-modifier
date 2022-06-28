@@ -1,8 +1,13 @@
 tool
 extends EditorPlugin
 
+var plugin = preload(
+	"res://addons/array_modifier/inspector/array_modifier_inspector_plugin.gd"
+).new()
+
 
 func _enter_tree():
+	add_inspector_plugin(plugin)
 	add_custom_type(
 		"ArrayModifier",
 		"Spatial",
@@ -30,6 +35,7 @@ func _enter_tree():
 
 
 func _exit_tree():
+	remove_inspector_plugin(plugin)
 	remove_custom_type("ArrayModifier")
 	remove_custom_type("ArrayModifierPath")
 	remove_custom_type("ArrayModifier2D")

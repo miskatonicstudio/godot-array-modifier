@@ -12,6 +12,27 @@ func _ready():
 	_adjust_copies()
 
 
+func apply_array_modifier():
+	var parent = get_parent()
+	
+	# Move copies
+	for hook in _hooks.values():
+		for child in hook.get_children():
+			hook.remove_child(child)
+			parent.add_child_below_node(self, child)
+			child.owner = parent
+		remove_child(hook)
+		hook.queue_free()
+	
+	# Move actual children (not hooks/copies)
+	for child in get_children():
+		remove_child(child)
+		parent.add_child_below_node(self, child)
+		child.owner = parent
+	
+	queue_free()
+
+
 func set_repeat_levels(value):
 	# Make sure the value will be at least 1
 	for i in range(len(value)):

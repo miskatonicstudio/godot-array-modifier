@@ -32,6 +32,27 @@ func _get_copy_position_rotation(instance_number):
 	return [newpos, p2]
 
 
+func apply_array_modifier():
+	var parent = get_parent()
+	
+	# Move copies
+	for hook in _hooks.values():
+		for child in hook.get_children():
+			hook.remove_child(child)
+			parent.add_child_below_node(self, child)
+			child.owner = parent
+		remove_child(hook)
+		hook.queue_free()
+	
+	# Move actual children (not hooks/copies)
+	for child in get_children():
+		remove_child(child)
+		parent.add_child_below_node(self, child)
+		child.owner = parent
+	
+	queue_free()
+
+
 func set_path(value):
 	if get_node(value) is Path:
 		_path_node = get_node(value)
