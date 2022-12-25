@@ -20,7 +20,7 @@ func apply_array_modifier():
 		for child in hook.get_children():
 			hook.remove_child(child)
 			parent.add_child_below_node(self, child)
-			child.owner = parent
+			child.owner = self.owner
 		remove_child(hook)
 		hook.queue_free()
 	
@@ -28,7 +28,7 @@ func apply_array_modifier():
 	for child in get_children():
 		remove_child(child)
 		parent.add_child_below_node(self, child)
-		child.owner = parent
+		child.owner = self.owner
 	
 	queue_free()
 
