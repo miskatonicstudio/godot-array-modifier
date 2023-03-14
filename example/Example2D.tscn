@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://bdgyete5r5pp4"]
 
-[ext_resource path="res://addons/array_modifier/ArrayModifier2D.gd" type="Script" id=1]
-[ext_resource path="res://resources/sprite.png" type="Texture" id=2]
+[ext_resource type="Script" path="res://addons/array_modifier/ArrayModifier2D.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cmkewfmiyp1sm" path="res://resources/sprite.png" id="2"]
 
 [node name="Example2D" type="Node2D"]
 
 [node name="ArrayModifier2D" type="Node2D" parent="."]
-position = Vector2( 150, 150 )
-script = ExtResource( 1 )
-repeat_levels = [ 5, 3 ]
-repeat_offsets = [ Vector2( 150, 0 ), Vector2( 0, 150 ) ]
+position = Vector2(150, 150)
+script = ExtResource("1")
+repeat_levels = Array[int]([5, 3])
+repeat_offsets = Array[Vector2]([Vector2(150, 0), Vector2(0, 150)])
 
-[node name="Sprite" type="Sprite" parent="ArrayModifier2D"]
-texture = ExtResource( 2 )
+[node name="Sprite2D" type="Sprite2D" parent="ArrayModifier2D"]
+texture = ExtResource("2")
