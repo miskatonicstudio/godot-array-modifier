@@ -10,6 +10,7 @@ var _hooks = Dictionary()
 
 func _ready():
 	_adjust_copies()
+	_adjust_position_of_copies()
 
 
 func apply_array_modifier():
