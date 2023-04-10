@@ -1,6 +1,6 @@
-# Godot Array Modifier
+https://user-images.githubusercontent.com/36821133/230897709-ff770423-e684-4d44-a603-16e644ef424d.mp4
 
-![Screenshot](./screenshots/screenshot.png?raw=true)
+# Godot Array Modifier
 
 This plugin recreates the functionality of the Array Modifier from Blender 3D.
 
