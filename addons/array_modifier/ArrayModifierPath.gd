@@ -1,16 +1,16 @@
-extends Spatial
-tool
+@tool
+extends Node3D
 
-export (NodePath) var path setget set_path
-export (float, 0, 1, 0.001) var path_offset_start setget set_path_offset_start
-export (float) var repeat_offset setget set_repeat_offset
-export (Vector3) var instance_offset = Vector3.ZERO
+@export var path: NodePath : set = set_path
+@export_range(0, 1, 0.001) var path_offset_start: float : set = set_path_offset_start
+@export var repeat_offset: float : set = set_repeat_offset
+@export var instance_offset: Vector3 = Vector3.ZERO
 
-export (int) var repeat_count = 1 setget set_repeat_count
-export (bool) var force_refresh = false setget set_force_refresh
+@export var repeat_count: int = 1 : set = set_repeat_count
+@export var force_refresh: bool = false : set = set_force_refresh
 
 var _hooks = Dictionary()
-# Path node
+# Path3D node
 var _path_node = null
 var _path_length = 0
 
@@ -25,8 +25,8 @@ func _get_copy_position_rotation(instance_number):
 	var absolute_offset = fmod(_path_length * position, _path_length)
 	var offset_1 = max(absolute_offset - 0.01, 0)
 	var offset_2 = min(absolute_offset + 0.01, _path_length)
-	var p1 = _path_node.curve.interpolate_baked(offset_1, true)
-	var p2 = _path_node.curve.interpolate_baked(offset_2, true)
+	var p1 = _path_node.curve.sample_baked(offset_1, true)
+	var p2 = _path_node.curve.sample_baked(offset_2, true)
 	var newpos = p1 + ((p2 - p1) / 2.0)
 
 	return [newpos, p2]
@@ -39,7 +39,7 @@ func apply_array_modifier():
 	for hook in _hooks.values():
 		for child in hook.get_children():
 			hook.remove_child(child)
-			parent.add_child_below_node(self, child)
+			add_sibling(child)
 			child.owner = self.owner
 		remove_child(hook)
 		hook.queue_free()
@@ -47,22 +47,22 @@ func apply_array_modifier():
 	# Move actual children (not hooks/copies)
 	for child in get_children():
 		remove_child(child)
-		parent.add_child_below_node(self, child)
+		add_sibling(child)
 		child.owner = self.owner
 	
 	queue_free()
 
 
 func set_path(value):
-	if get_node(value) is Path:
+	if get_node(value) is Path3D:
 		_path_node = get_node(value)
 		_path_length = _path_node.curve.get_baked_length()
 		path = value
 		_adjust_copies()
 	else:
-		printerr("Selected node is not a Path instance")
+		printerr("Selected node is not a Path3D instance")
 		_path_node = null
-		path = null
+		path = NodePath()
 
 
 func set_path_offset_start(value):
@@ -107,7 +107,7 @@ func _adjust_copies():
 			continue
 		
 		# Create a "hook" for each actual child, to hold the copies in
-		var hook = Spatial.new()
+		var hook = Node3D.new()
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
 		_hooks[hook.name] = hook
@@ -122,7 +122,7 @@ func _adjust_copies():
 				)
 				if instance_offset != Vector3.ZERO:
 					orig_child.translate(
-						get_transform().basis.xform(instance_offset)
+						get_transform().basis * instance_offset
 					)
 			else:
 				var temp_index = index
@@ -132,7 +132,7 @@ func _adjust_copies():
 					position_rotation[1], Vector3.UP
 				)
 				if instance_offset != Vector3.ZERO:
-					copy.translate(get_transform().basis.xform(instance_offset))
+					copy.translate(get_transform().basis * instance_offset)
 				hook.add_child(copy)
 
 
@@ -158,7 +158,7 @@ func _adjust_position_of_copies():
 				)
 				if instance_offset != Vector3.ZERO:
 					orig_child.translate(
-						get_transform().basis.xform(instance_offset)
+						get_transform().basis * instance_offset
 					)
 			else:
 				# Find the copy that should be moved
@@ -168,7 +168,7 @@ func _adjust_position_of_copies():
 					position_rotation[1], Vector3.UP
 				)
 				if instance_offset != Vector3.ZERO:
-					copy.translate(get_transform().basis.xform(instance_offset))
+					copy.translate(get_transform().basis * instance_offset)
 
 
 func _get_hook_name_prefix():

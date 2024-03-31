@@ -1,9 +1,9 @@
-extends Spatial
-tool
+@tool
+extends Node3D
 
-export (Array, int) var repeat_levels = [1] setget set_repeat_levels
-export (Array, Vector3) var repeat_offsets = [Vector3(1, 0, 0)] setget set_repeat_offsets
-export (bool) var force_refresh = false setget set_force_refresh
+@export var repeat_levels: Array[int] = [1] : set = set_repeat_levels
+@export var repeat_offsets: Array[Vector3] = [Vector3(1, 0, 0)] : set = set_repeat_offsets
+@export var force_refresh: bool = false : set = set_force_refresh
 
 var _hooks = Dictionary()
 
@@ -19,7 +19,7 @@ func apply_array_modifier():
 	for hook in _hooks.values():
 		for child in hook.get_children():
 			hook.remove_child(child)
-			parent.add_child_below_node(self, child)
+			add_sibling(child)
 			child.owner = self.owner
 		remove_child(hook)
 		hook.queue_free()
@@ -27,7 +27,7 @@ func apply_array_modifier():
 	# Move actual children (not hooks/copies)
 	for child in get_children():
 		remove_child(child)
-		parent.add_child_below_node(self, child)
+		add_sibling(child)
 		child.owner = self.owner
 	
 	queue_free()
@@ -80,7 +80,7 @@ func _adjust_copies():
 			continue
 		
 		# Create a "hook" for each actual child, to hold the copies in
-		var hook = Spatial.new()
+		var hook = Node3D.new()
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
 		_hooks[hook.name] = hook
@@ -128,7 +128,7 @@ func _adjust_position_of_copies():
 				local_offset += repeat_offset * coordinate
 			# Find the copy that should be moved
 			var copy = hook.get_children()[index - 1]
-			copy.translation = orig_child.translation + local_offset
+			copy.position = orig_child.position + local_offset
 
 
 func _get_hook_name_prefix():

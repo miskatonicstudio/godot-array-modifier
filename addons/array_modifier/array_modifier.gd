@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 var plugin = preload(
@@ -10,13 +10,13 @@ func _enter_tree():
 	add_inspector_plugin(plugin)
 	add_custom_type(
 		"ArrayModifier",
-		"Spatial",
+		"Node3D",
 		preload("ArrayModifier.gd"),
 		preload("array_modifier_icon.png")
 	)
 	add_custom_type(
 		"ArrayModifierPath",
-		"Spatial",
+		"Node3D",
 		preload("ArrayModifierPath.gd"),
 		preload("array_modifier_path_icon.png")
 	)

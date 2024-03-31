@@ -1,9 +1,9 @@
+@tool
 extends Node2D
-tool
 
-export (Array, int) var repeat_levels = [1] setget set_repeat_levels
-export (Array, Vector2) var repeat_offsets = [Vector2(100, 0)] setget set_repeat_offsets
-export (bool) var force_refresh = false setget set_force_refresh
+@export var repeat_levels: Array[int] = [1] : set = set_repeat_levels
+@export var repeat_offsets: Array[Vector2] = [Vector2(100, 0)] : set = set_repeat_offsets
+@export var force_refresh: bool = false : set = set_force_refresh
 
 var _hooks = Dictionary()
 
@@ -19,7 +19,7 @@ func apply_array_modifier():
 	for hook in _hooks.values():
 		for child in hook.get_children():
 			hook.remove_child(child)
-			parent.add_child_below_node(self, child)
+			add_sibling(child)
 			child.owner = self.owner
 		remove_child(hook)
 		hook.queue_free()
@@ -27,7 +27,7 @@ func apply_array_modifier():
 	# Move actual children (not hooks/copies)
 	for child in get_children():
 		remove_child(child)
-		parent.add_child_below_node(self, child)
+		add_sibling(child)
 		child.owner = self.owner
 	
 	queue_free()

@@ -1,29 +1,29 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://ds7hvoaoc14h0"]
 
-[ext_resource path="res://addons/array_modifier/ArrayModifier.gd" type="Script" id=1]
-[ext_resource path="res://resources/cryo_albedo.png" type="Texture" id=2]
-[ext_resource path="res://resources/cryo.obj" type="ArrayMesh" id=3]
+[ext_resource type="Script" path="res://addons/array_modifier/ArrayModifier.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://b35d7s5gxu4fx" path="res://resources/cryo_albedo.png" id="2"]
+[ext_resource type="ArrayMesh" uid="uid://bgo1f060gt62w" path="res://resources/cryo.obj" id="3"]
 
-[sub_resource type="SpatialMaterial" id=1]
-albedo_texture = ExtResource( 2 )
+[sub_resource type="StandardMaterial3D" id="1"]
+albedo_texture = ExtResource("2")
 
-[sub_resource type="PlaneMesh" id=2]
-size = Vector2( 100, 100 )
+[sub_resource type="PlaneMesh" id="2"]
+size = Vector2(100, 100)
 
-[node name="Example" type="Spatial"]
+[node name="Example" type="Node3D"]
 
-[node name="ArrayModifier" type="Spatial" parent="."]
-script = ExtResource( 1 )
-repeat_levels = [ 3, 7, 4 ]
-repeat_offsets = [ Vector3( 4, 0, 0 ), Vector3( 0, 0, 3 ), Vector3( 0, 5, 0 ) ]
+[node name="ArrayModifier" type="Node3D" parent="."]
+script = ExtResource("1")
+repeat_levels = Array[int]([3, 7, 4])
+repeat_offsets = Array[Vector3]([Vector3(4, 0, 0), Vector3(0, 0, 3), Vector3(0, 5, 0)])
 
-[node name="Model" type="MeshInstance" parent="ArrayModifier"]
-material_override = SubResource( 1 )
-mesh = ExtResource( 3 )
+[node name="Model" type="MeshInstance3D" parent="ArrayModifier"]
+material_override = SubResource("1")
+mesh = ExtResource("3")
 
-[node name="Floor" type="MeshInstance" parent="."]
-mesh = SubResource( 2 )
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("2")
 
-[node name="Light" type="OmniLight" parent="Floor"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22, -5 )
+[node name="Light3D" type="OmniLight3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22, -5)
 omni_range = 40.0
