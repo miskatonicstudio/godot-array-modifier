@@ -13,24 +13,7 @@ func _ready():
 
 
 func apply_array_modifier():
-	var parent = get_parent()
-	
-	# Move copies
-	for hook in _hooks.values():
-		for child in hook.get_children():
-			hook.remove_child(child)
-			add_sibling(child)
-			child.owner = self.owner
-		remove_child(hook)
-		hook.queue_free()
-	
-	# Move actual children (not hooks/copies)
-	for child in get_children():
-		remove_child(child)
-		add_sibling(child)
-		child.owner = self.owner
-	
-	queue_free()
+	Engine.get_singleton("undo_redo").apply_array_modifier.call_deferred(self)
 
 
 func set_repeat_levels(value):

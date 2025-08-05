@@ -32,9 +32,14 @@ func _enter_tree():
 		preload("ArrayModifierPath2D.gd"),
 		preload("array_modifier_path_2d_icon.png")
 	)
+	# Create a global reference to an instance of EditorUndoRedoManager
+	var undo_redo = preload("res://addons/array_modifier/global/undo_redo.gd").new()
+	undo_redo._undo_redo = get_undo_redo()
+	Engine.register_singleton("undo_redo", undo_redo)
 
 
 func _exit_tree():
+	Engine.unregister_singleton("undo_redo")
 	remove_inspector_plugin(plugin)
 	remove_custom_type("ArrayModifier")
 	remove_custom_type("ArrayModifierPath")
