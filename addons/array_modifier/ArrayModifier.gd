@@ -3,13 +3,12 @@ extends Node3D
 
 @export var repeat_levels: Array[int] = [1] : set = set_repeat_levels
 @export var repeat_offsets: Array[Vector3] = [Vector3(1, 0, 0)] : set = set_repeat_offsets
-@export var force_refresh: bool = false : set = set_force_refresh
 
 var _hooks = Dictionary()
 
 
 func _ready():
-	_adjust_copies()
+	refresh_duplicates()
 
 
 func apply_array_modifier():
@@ -29,7 +28,7 @@ func set_repeat_levels(value):
 	while len(repeat_levels) < len(repeat_offsets):
 		repeat_offsets.pop_back()
 	
-	_adjust_copies()
+	refresh_duplicates()
 
 
 func set_repeat_offsets(value):
@@ -39,14 +38,10 @@ func set_repeat_offsets(value):
 	
 	repeat_offsets = value
 	
-	_adjust_position_of_copies()
+	_adjust_position_of_duplicates()
 
 
-func set_force_refresh(value):
-	_adjust_copies()
-
-
-func _adjust_copies():
+func refresh_duplicates():
 	# Clean up existing hooks
 	for child in get_children():
 		if child.name.begins_with(_get_hook_name_prefix()):
@@ -62,7 +57,7 @@ func _adjust_copies():
 		if orig_child.name.begins_with(_get_hook_name_prefix()):
 			continue
 		
-		# Create a "hook" for each actual child, to hold the copies in
+		# Create a "hook" for each actual child, to hold the duplicates in
 		var hook = Node3D.new()
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
@@ -83,7 +78,7 @@ func _adjust_copies():
 			hook.add_child(copy)
 
 
-func _adjust_position_of_copies():
+func _adjust_position_of_duplicates():
 	var total_copy_count = 1
 	for level in range(len(repeat_levels)):
 		total_copy_count *= repeat_levels[level]
