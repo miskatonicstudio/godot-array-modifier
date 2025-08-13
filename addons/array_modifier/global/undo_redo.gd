@@ -16,5 +16,5 @@ func apply_array_modifier(array_node: Node):
 			_undo_redo.add_do_method(child, "set_owner", array_node.owner)
 			_undo_redo.add_undo_method(array_node, "remove_child", child)
 			_undo_redo.add_undo_method(child, "queue_free")
-	_undo_redo.add_undo_method(array_node, "_adjust_copies")
+	_undo_redo.add_undo_method(array_node, "refresh_duplicates")
 	_undo_redo.commit_action()

@@ -7,7 +7,6 @@ extends Node3D
 @export var instance_offset: Vector3 = Vector3.ZERO
 
 @export var repeat_count: int = 1 : set = set_repeat_count
-@export var force_refresh: bool = false : set = set_force_refresh
 
 var _hooks = Dictionary()
 # Path3D node
@@ -16,8 +15,7 @@ var _path_length = 0
 
 
 func _ready():
-	if _path_node != null:
-		_adjust_copies()
+	refresh_duplicates()
 
 
 func _get_copy_position_rotation(instance_number):
@@ -41,7 +39,7 @@ func set_path(value):
 		_path_node = get_node(value)
 		_path_length = _path_node.curve.get_baked_length()
 		path = value
-		_adjust_copies()
+		refresh_duplicates()
 	else:
 		printerr("Selected node is not a Path3D instance")
 		_path_node = null
@@ -50,15 +48,13 @@ func set_path(value):
 
 func set_path_offset_start(value):
 	path_offset_start = value
-	if _path_node != null:
-		_adjust_position_of_copies()
+	_adjust_position_of_duplicates()
 
 
 func set_repeat_count(value):
 	# Make sure the value will be at least 1
 	repeat_count = max(value, 1)
-	if _path_node != null:
-		_adjust_copies()
+	refresh_duplicates()
 
 
 func set_repeat_offset(value):
@@ -68,16 +64,13 @@ func set_repeat_offset(value):
 	
 	repeat_offset = value
 	
-	if _path_node != null:
-		_adjust_position_of_copies()
+	_adjust_position_of_duplicates()
 
 
-func set_force_refresh(value):
-	if _path_node != null:
-		_adjust_copies()
-
-
-func _adjust_copies():
+func refresh_duplicates():
+	if _path_node == null:
+		return
+	
 	# Clean up existing hooks
 	for child in get_children():
 		if child.name.begins_with(_get_hook_name_prefix()):
@@ -89,7 +82,7 @@ func _adjust_copies():
 		if orig_child.name.begins_with(_get_hook_name_prefix()):
 			continue
 		
-		# Create a "hook" for each actual child, to hold the copies in
+		# Create a "hook" for each actual child, to hold the duplicates in
 		var hook = Node3D.new()
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
@@ -119,7 +112,10 @@ func _adjust_copies():
 				hook.add_child(copy)
 
 
-func _adjust_position_of_copies():	
+func _adjust_position_of_duplicates():
+	if _path_node == null:
+		return
+	
 	for orig_child in get_children():
 		# Ignore hooks
 		if orig_child.name.begins_with(_get_hook_name_prefix()):
