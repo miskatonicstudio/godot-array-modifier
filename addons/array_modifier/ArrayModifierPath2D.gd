@@ -87,6 +87,7 @@ func refresh_duplicates():
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
 		_hooks[hook.name] = hook
+		var duplicate_count = 1
 		
 		# Original instance has to be moved as well, so start with 0
 		for index in range(0, repeat_count):
@@ -104,6 +105,8 @@ func refresh_duplicates():
 			else:
 				var temp_index = index
 				var copy = orig_child.duplicate()
+				copy.name += "_dup" + str(duplicate_count)
+				duplicate_count += 1
 				copy.transform.origin = position_rotation[0] + instance_offset
 				copy.transform = Transform2D(
 					position_rotation[1].angle_to_point(position_rotation[0]),
