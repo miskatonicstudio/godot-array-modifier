@@ -62,6 +62,7 @@ func refresh_duplicates():
 		hook.name = _get_hook_name(orig_child)
 		add_child(hook)
 		_hooks[hook.name] = hook
+		var duplicate_count = 1
 		
 		# Index 0 would be the original, so start with 1
 		for index in range(1, total_copy_count):
@@ -74,6 +75,8 @@ func refresh_duplicates():
 				temp_index = int(temp_index / repeat_level)
 				local_offset += repeat_offset * coordinate
 			var copy = orig_child.duplicate()
+			copy.name += "_dup" + str(duplicate_count)
+			duplicate_count += 1
 			copy.translate(local_offset)
 			hook.add_child(copy)
 
