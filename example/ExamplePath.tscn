@@ -19,14 +19,14 @@ size = Vector2(100, 100)
 
 [node name="ExamplePath" type="Node3D"]
 
-[node name="ArrayModifierPath" type="Node3D" parent="."]
+[node name="ArrayModifierPath" type="Node3D" parent="." node_paths=PackedStringArray("path")]
 script = ExtResource("1")
 path = NodePath("../Path3D")
 repeat_offset = 0.1
 repeat_count = 10
 
 [node name="Model" type="MeshInstance3D" parent="ArrayModifierPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+transform = Transform3D(0.999938, 0, -0.0111179, 0, 1, 0, 0.0111179, 0, 0.999938, -4.99997, 0, -0.00287338)
 material_override = SubResource("1")
 mesh = ExtResource("2")
 

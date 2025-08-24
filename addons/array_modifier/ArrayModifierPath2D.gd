@@ -1,7 +1,7 @@
 @tool
 extends Node2D
 
-@export var path: NodePath : set = set_path
+@export var path: Path2D : set = set_path
 @export_range(0, 1, 0.001) var path_offset_start: float : set = set_path_offset_start
 @export var repeat_offset: float : set = set_repeat_offset
 @export var instance_offset: Vector2 = Vector2.ZERO
@@ -9,9 +9,6 @@ extends Node2D
 @export var repeat_count: int = 1 : set = set_repeat_count
 
 var _hooks = Dictionary()
-# Path3D node
-var _path_node = null
-var _path_length = 0
 
 
 func _ready():
@@ -19,12 +16,13 @@ func _ready():
 
 
 func _get_copy_position_rotation(instance_number):
+	var path_length = path.curve.get_baked_length()
 	var position = path_offset_start + instance_number * repeat_offset 
-	var absolute_offset = fmod(_path_length * position, _path_length)
+	var absolute_offset = fmod(path_length * position, path_length)
 	var offset_1 = max(absolute_offset - 0.01, 0)
-	var offset_2 = min(absolute_offset + 0.01, _path_length)
-	var p1 = _path_node.curve.sample_baked(offset_1, true)
-	var p2 = _path_node.curve.sample_baked(offset_2, true)
+	var offset_2 = min(absolute_offset + 0.01, path_length)
+	var p1 = path.curve.sample_baked(offset_1, true)
+	var p2 = path.curve.sample_baked(offset_2, true)
 	var newpos = p1 + ((p2 - p1) / 2.0)
 
 	return [newpos, p2]
@@ -34,16 +32,9 @@ func apply_array_modifier():
 	Engine.get_singleton("undo_redo").apply_array_modifier.call_deferred(self)
 
 
-func set_path(value):
-	if get_node(value) is Path2D:
-		_path_node = get_node(value)
-		_path_length = _path_node.curve.get_baked_length()
-		path = value
-		refresh_duplicates()
-	else:
-		printerr("Selected node is not a Path2D instance")
-		_path_node = null
-		path = NodePath()
+func set_path(value: Path2D):
+	path = value
+	refresh_duplicates()
 
 
 func set_path_offset_start(value):
@@ -68,7 +59,7 @@ func set_repeat_offset(value):
 
 
 func refresh_duplicates():
-	if _path_node == null:
+	if not path:
 		return
 	
 	# Clean up existing hooks
@@ -118,7 +109,7 @@ func refresh_duplicates():
 
 
 func _adjust_position_of_duplicates():
-	if _path_node == null:
+	if not path:
 		return
 	
 	for orig_child in get_children():
