@@ -11,14 +11,15 @@ point_count = 6
 
 [node name="ExamplePath2D" type="Node2D"]
 
-[node name="ArrayModifierPath2D" type="Node2D" parent="."]
+[node name="ArrayModifierPath2D" type="Node2D" parent="." node_paths=PackedStringArray("path")]
 script = ExtResource("1")
+path = NodePath("../Path2D")
 repeat_offset = 0.2
 repeat_count = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="ArrayModifierPath2D"]
-position = Vector2(86.5713, 153.323)
-rotation = 0.987017
+position = Vector2(86.571, 153.323)
+rotation = -2.00194
 texture = ExtResource("2")
 
 [node name="Path2D" type="Path2D" parent="."]
